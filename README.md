@@ -1,6 +1,9 @@
 # MSP
 Mud Sound Protocol plugin for Blightmud
 
+# Installation
+In Blightmud run: `/add_plugin https://github.com/Blightmud/msp`
+
 ## Usage
 
 ***MSP.set_dir(dir)***
