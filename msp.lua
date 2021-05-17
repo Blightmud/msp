@@ -58,20 +58,38 @@ end
 -- Enable MSP subneg
 core.enable_protocol(90)
 
+local function play(params, play_cb)
+	local amplify = 1.0
+	local loop = 1
+	local sound_file = audio_dir .. "/" .. params["sound"]
+	if params["L"] then
+		loop = params["L"]
+	end
+	if params["V"] then
+		amplify = params["V"] / 100
+	end
+	if filetype then
+		sound_file = sound_file .. "." .. filetype
+	end
+	if file_exists(sound_file) then
+		if loop <= 0 then
+			play_cb(sound_file, { loop=true, amplify=amplify })
+		else
+			for _=0,loop do
+				play_cb(sound_file, { loop=false, amplify=amplify })
+			end
+		end
+	else
+		info("No sound for: " .. params["sound"])
+	end
+end
+
 local triggers = trigger.add_group()
 triggers:add("^!!SOUND\\(([\\w\\d= ]+)\\)", {gag=true, raw=true},
 	function (m)
 		if audio_dir then
 			local params = get_params(m[2])
-			local sound_file = audio_dir .. "/" .. params["sound"]
-			if filetype then
-				sound_file = sound_file .. "." .. filetype
-			end
-			if file_exists(sound_file) then
-				audio.play_sfx(sound_file)
-			else
-				info("No sound for: " .. params["sound"])
-			end
+			play(params, audio.play_sfx)
 		end
 	end
 )
@@ -80,15 +98,7 @@ triggers:add("^!!MUSIC\\(([\\w\\d= ]+)\\)", {raw=true, gag=true},
 	function (m)
 		if audio_dir then
 			local params = get_params(m[2])
-			local sound_file = audio_dir .. "/" .. params["sound"]
-			if filetype then
-				sound_file = sound_file .. "." .. filetype
-			end
-			if file_exists(sound_file) then
-				audio.play_music(sound_file, true)
-			else
-				info("No sound for: " .. params["sound"])
-			end
+			play(params, audio.play_music)
 		end
 	end
 )

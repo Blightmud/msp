@@ -30,8 +30,6 @@ If a soundfile doesn't exist this will be highlited by the plugin.
 ### What doesn't work yet
 
 - Sound file wildcars (eg. `sword*`)
-- Volume (`V`) parameter will be ignored because it's not yet supported in Blightmud.
-- Loop (`L`) parameter
 - Priority (`P`) parameter
 - Continue (`C`) parameter
 - Type (`T`) parameter
